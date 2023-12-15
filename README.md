@@ -160,8 +160,11 @@ iface eth0 inet static
 ## (B) Untuk menghitung rute-rute yang diperlukan, gunakan perhitungan dengan metode VLSM. Buat juga pohonnya, dan lingkari subnet yang dilewati.
 ## (C) Kemudian buatlah rute sesuai dengan pembagian IP yang kalian lakukan. 
 Berikut ini adalah tree dari hasil pembagian VLSM  
+![tree VLSM](./images/VLSM.png)  
 Berikut ini adalah daftar pembagian IP VLSM  
+![tree VLSM](./images/pembagian-ip.jpeg)  
 Berikut ini adalah penggambaran subnetting pada topologi dengan metode VLSM  
+![tree VLSM](./images/subnet-topologi.png)  
 Berikut ini adalah daftar routing yang perlu dilakukan  
 <b>Aura</b>
 ```
