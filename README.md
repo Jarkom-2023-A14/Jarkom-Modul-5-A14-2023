@@ -287,6 +287,17 @@ Perintah kedua akan mendrop semua paket tcp yang bukan pada port 8080
 Perintah ketiga akan mendrop semua paket udp  
 Perintah keempat akan menambahkan chain NO_2 ke chain INPUT, sehingga perintah kedua dan ketiga akan dijalankan ketika ada paket yang masuk ke node
 ## 3 Kepala Suku North Area meminta kalian untuk membatasi DHCP dan DNS Server hanya dapat dilakukan ping oleh maksimal 3 device secara bersamaan, selebihnya akan di drop.
+Pada Richter dan Revolte, jalankan perintah berikut  
+```
+iptables -N NO_3
+iptables -A NO_3 -p icmp --icmp-type echo-request -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A NO_3 -p icmp --icmp-type echo-request -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
+iptables -A INPUT -j NO_3
+```
+Perintah pertama akan membuat chain baru yaitu NO_3  
+Perintah kedua akan menerima koneksi ICMP echo-request (ping) dari IP yang sebelumnya sudah membentuk koneksi, dengan perintah ini maka  client ke-4 melakukan ping, 3 client pertama tetap dapat melakukan ping  
+Perintah ketiga akan mendrop semua paket ICMP echo-request (ping) dari koneksi keempat / lebih  
+Perintah keempat akan menambahkan chain NO_3 ke chain INPUT sehingga perintah kedua dan ketiga akan dijalankan ketika ada paket yang masuk ke node  
 
 ## 4 Lakukan pembatasan sehingga koneksi SSH pada Web Server hanya dapat dilakukan oleh masyarakat yang berada pada GrobeForest.
 Pada node Web Server (Sein, Stark), jalankan perintah berikut
@@ -297,7 +308,8 @@ iptables -A INPUT -j NO_4
 ```
 Perintah pertama akan membuat chain baru yaitu NO_4  
 Perintah kedua akan mendrop semua paket tcp di port 22 yang bukan berasal dari 10.6.8.3 hingga 10.6.11.254, yang merupakan kemungkinan range IP dari GrobeForest  
-Perintah ketiga akan menambahkan chain NO_3 ke chain INPUT, sehingga perintah kedua akan dijalankan ketika ada paket yang masuk ke node
+Perintah ketiga akan menambahkan chain NO_3 ke chain INPUT, sehingga perintah kedua akan dijalankan ketika ada paket yang masuk ke node  
+
 ## 5 Selain itu, akses menuju WebServer hanya diperbolehkan saat jam kerja yaitu Senin-Jumat pada pukul 08.00-16.00.
 Pada node Web Server (Sein, Stark), jalankan perintah berikut
 ```
@@ -313,7 +325,8 @@ Perintah ketiga akan mendrop semua paket yang berasal dari ketika dikirim pada h
 Perintah keempat akan mendrop semua paket yang berasal dari ketika dikirim pada hari kerja (Senin, Selasa, Rabu, Kamis, dan Jumat) pada waktu 16:01 hingga 23:59  
 Perintah kelima akan menambahkan chain NO_5 ke chain INPUT, sehingga perintah kedua hingga keempat akan dijalankan ketika ada paket yang masuk ke node  
 
-Perintah yang digunakan agak kurang efisien, akan tetapi diperlukan pendekatan ini agar dapat dilakukan logging (no 10)
+Perintah yang digunakan agak kurang efisien, akan tetapi diperlukan pendekatan ini agar dapat dilakukan logging (no 10)  
+
 ## 6 Lalu, karena ternyata terdapat beberapa waktu di mana network administrator dari WebServer tidak bisa stand by, sehingga perlu ditambahkan rule bahwa akses pada hari Senin - Kamis pada jam 12.00 - 13.00 dilarang (istirahat maksi cuy) dan akses di hari Jumat pada jam 11.00 - 13.00 juga dilarang (maklum, Jumatan rek).
 Pada node Web Server (Sein, Stark), jalankan perintah berikut
 ```
