@@ -393,3 +393,6 @@ Perintah keempat akan menambahkan chain NO_9 ke chain INPUT, sehinga perintah ke
 
 ## 10 Karena kepala suku ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level. 
 Karena perlu dilakukan logging, maka untuk semua rule iptables yang menggunakan `-j DROP`, tambahkan juga rule dengan batasan yang sama akan tetapi digunakan `-j LOG` sebelum perintah untuk drop.  
+
+## Kendala  
+1) Pada no 10, tidak berhasil ditemukan file dimana LOG dicatat, akan tetapi ketika dijalankan `iptables -L -v` terlihat bahwa paket masuk kriteria command LOG
