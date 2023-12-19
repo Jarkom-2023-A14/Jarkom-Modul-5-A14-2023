@@ -1,0 +1,14 @@
+iptables -F
+
+iptables -N NO_2
+iptables -A NO_2 -p tcp -m multiport ! --dport 8080 -j LOG
+iptables -A NO_2 -p tcp -m multiport ! --dport 8080 -j DROP
+iptables -A NO_2 -p udp -j LOG
+iptables -A NO_2 -p udp -j DROP
+iptables -A INPUT -j NO_2
+
+iptables -N NO_3
+iptables -A NO_3 -p icmp --icmp-type echo-request -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A NO_3 -p icmp --icmp-type echo-request -m connlimit --connlimit-above 3 --connlimit-mask 0 -j LOG
+iptables -A NO_3 -p icmp --icmp-type echo-request -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
+iptables -A INPUT -j NO_3
