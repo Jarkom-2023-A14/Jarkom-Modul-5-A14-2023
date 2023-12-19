@@ -1,0 +1,11 @@
+iptables -F
+iptables -t nat -F
+
+iptables -t nat -A POSTROUTING -o eth0 -j SNAT -s 10.6.0.0/20 --to-source 192.168.122.2
+
+iptables -N NO_2
+iptables -A NO_2 -p tcp -m multiport ! --dport 8080 -j LOG
+iptables -A NO_2 -p tcp -m multiport ! --dport 8080 -j DROP
+iptables -A NO_2 -p udp -j LOG
+iptables -A NO_2 -p udp -j DROP
+iptables -A INPUT -j NO_2
