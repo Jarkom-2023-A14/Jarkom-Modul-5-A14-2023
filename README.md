@@ -356,8 +356,8 @@ Perintah keempat akan menambahkan chain NO_7 ke chain PREROUTING pada tabel NAT,
 Pada node Frieren, jalankan perintah berikut
 ```
 iptables -t nat -N NO_7
-iptables -A NO_7 -t nat -p tcp --dport 443 -d 10.6.8.2 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 10.6.8.2
-iptables -A NO_7 -t nat -p tcp --dport 443 -d 10.6.8.2 -j DNAT --to-destination 10.6.14.146
+iptables -A NO_7 -t nat -p tcp --dport 443 -d 10.6.14.146 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 10.6.8.2
+iptables -A NO_7 -t nat -p tcp --dport 443 -d 10.6.14.146 -j DNAT --to-destination 10.6.14.146
 iptables -t nat -A PREROUTING -j NO_7
 ```
 Perintah pertama akan membuat chain baru yaitu NO_7 pada tabel NAT  
