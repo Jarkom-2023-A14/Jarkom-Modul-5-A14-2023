@@ -1,0 +1,44 @@
+iptables -F
+
+iptables -N NO_2
+iptables -A NO_2 -p tcp -m multiport ! --dport 8080 -j LOG
+iptables -A NO_2 -p tcp -m multiport ! --dport 8080 -j DROP
+iptables -A NO_2 -p udp -j LOG
+iptables -A NO_2 -p udp -j DROP
+iptables -A INPUT -j NO_2
+
+iptables -N NO_4
+iptables -A NO_4 -p tcp --dport 22 -m iprange ! --src-range 10.6.8.3-10.6.11.254 -j LOG
+iptables -A NO_4 -p tcp --dport 22 -m iprange ! --src-range 10.6.8.3-10.6.11.254 -j DROP
+iptables -A INPUT -j NO_4
+
+iptables -N NO_5
+iptables -A NO_5 -m time --weekdays Sat,Sun -j LOG
+iptables -A NO_5 -m time --weekdays Sat,Sun -j DROP
+iptables -A NO_5 -m time --weekdays Mon,Tue,Wed,Thu,Fri --timestart 00:00 --timestop 07:59 -j LOG
+iptables -A NO_5 -m time --weekdays Mon,Tue,Wed,Thu,Fri --timestart 00:00 --timestop 07:59 -j DROP
+iptables -A NO_5 -m time --weekdays Mon,Tue,Wed,Thu,Fri --timestart 16:01 --timestop 23:59 -j LOG
+iptables -A NO_5 -m time --weekdays Mon,Tue,Wed,Thu,Fri --timestart 16:01 --timestop 23:59 -j DROP
+iptables -A INPUT -j NO_5
+
+iptables -N NO_6
+iptables -A NO_6 -m time --timestart 12:00 --timestop 13:00 --weekdays Mon,Tue,Wed,Thu -j LOG
+iptables -A NO_6 -m time --timestart 12:00 --timestop 13:00 --weekdays Mon,Tue,Wed,Thu -j DROP
+iptables -A NO_6 -m time --timestart 11:00 --timestop 13:00 --weekdays Fri -j LOG
+iptables -A NO_6 -m time --timestart 11:00 --timestop 13:00 --weekdays Fri -j DROP
+iptables -A INPUT -j NO_6
+
+iptables -N NO_9
+iptables -A NO_9 -m recent --name scan --update --seconds 600 --hitcount 20 -j LOG
+iptables -A NO_9 -m recent --name scan --update --seconds 600 --hitcount 20 -j DROP
+iptables -A NO_9 -m recent --name scan --set -j ACCEPT
+iptables -A INPUT -j NO_9
+
+Himmel
+iptables -F
+iptables -N NO_2
+iptables -A NO_2 -p tcp -m multiport ! --dport 8080 -j LOG
+iptables -A NO_2 -p tcp -m multiport ! --dport 8080 -j DROP
+iptables -A NO_2 -p udp -j LOG
+iptables -A NO_2 -p udp -j DROP
+iptables -A INPUT -j NO_2
